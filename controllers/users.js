@@ -18,18 +18,20 @@ const usersGet = async (req = request, res = response) => {
   res.status(200).json({ total, usuarios });
 }
 const usersPatch = (req = request, res = response) => {
-  res.status(403).json({
+  res.status(200).json({
     msg: "Patch - controller"
   })
 }
 
-const usersDelete = async(req, res) => {
-  const {id} = req.params;
+const usersDelete = async (req, res) => {
+  const { id } = req.params;
 
   /*eliminar a la fuerza const {id} = await Usuario.findByIdAndDelete(id)*/
-  const usuario = await Usuario.findByIdAndUpdate(id, {estado:false})
-  res.status(403).json({
-    usuario
+  const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+  const usuarioAutenticado = req.usuario;
+  res.status(200).json({
+    usuario,
+    usuarioAutenticado
   })
 }
 

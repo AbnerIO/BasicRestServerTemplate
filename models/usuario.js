@@ -8,12 +8,12 @@ const UsuarioSchema = Schema({
     },
     correo: {
         type: String,
-        required : [true, "El nombre no fue introducido"],
+        required : [true, "El correo no fue introducido"],
         unique:true
     },
     password: {
         type: String,
-        required : [true, "El nombre no fue introducido"]
+        required : [true, "La contraseña no fue introducida"]
     },
     img: {
         type: String
@@ -35,7 +35,8 @@ const UsuarioSchema = Schema({
 
 //Purga la __v y password para ya no retornarlos (v no me sirve, password no se debe mandar )
 UsuarioSchema.methods.toJSON = function () {
-    const {__v, password, ...usuario} = this.toObject();
+    const {__v, password,_id, ...usuario} = this.toObject();
+    usuario.uid = _id;
     return usuario;
 }
 
