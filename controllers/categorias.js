@@ -22,11 +22,19 @@ const obtenerCategoria = async (req, res) => {
 
 //actualizarCategoria - recibe nombre
 const actualizarCategoria = async (req, res) => {
-    const nombre = req.body.nombre.toUpperCase();
-    const usuario = req.header("x-token")
+
     const { id } = req.params;
-    categoriaDB = await Categoria.findByIdAndUpdate(id, { nombre })
-    res.status(201).json({ nombre, usuario, id, categoriaDB })
+    const {estado, usuario, ...data} = req.body;
+
+    data.nombre = data.nombre.toUpperCase();
+    data.usuario = req.usuario._id;
+
+    const categoria = await Categoria.findOneAndUpdate(id, data, {new:true});
+    res.status(201).json({
+        categoria
+    })
+
+   
 }
 
 //borrarCategoria - convertir el estado a false
