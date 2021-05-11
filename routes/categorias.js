@@ -1,6 +1,6 @@
 const {Router} = require("express");
 const {check} = require("express-validator");
-const { crearCategoria, obtenerCategorias, obtenerCategoria } = require("../controllers/categorias");
+const { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria } = require("../controllers/categorias");
 const {existeCategoriaPorId}=require("../helpers/categoriavalidator.js");
 
 const {validarJwt, validarCampos} = require("../middlewares");
@@ -22,11 +22,12 @@ router.post("/", [
     validarCampos
 ],crearCategoria)
 /*Actualizar categoría - privado-  cualquier persona con token id valido*/
-router.put("/:id", (req,res)=> {
-    res.json({
-        msg: "actualizar"
-    })
-});
+router.put("/:id",[
+    validarJwt,
+    check("nombre", "El nombre es obligatorio").not().isEmpty(),
+    check("id").custom(existeCategoriaPorId),
+    validarCampos
+] ,actualizarCategoria);
 /*Borrar categoría - Admin*/
 router.delete("/:id", (req,res)=> {
     res.json({

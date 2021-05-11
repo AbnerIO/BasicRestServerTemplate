@@ -8,6 +8,7 @@ const existeCategoriaPorId = async (id) => {
 }
 
 
+
 module.exports = {
     existeCategoriaPorId
 };
