@@ -1,6 +1,7 @@
 const {Router} = require("express");
 const {check} = require("express-validator");
-const { crearCategoria, obtenerCategorias } = require("../controllers/categorias");
+const { crearCategoria, obtenerCategorias, obtenerCategoria } = require("../controllers/categorias");
+const {existeCategoriaPorId}=require("../helpers/categoriavalidator.js");
 
 const {validarJwt, validarCampos} = require("../middlewares");
 
@@ -8,13 +9,12 @@ const router = Router();
 
 
 /*Obtener todas las categorias - publico */
-router.get("/", obtenerCategorias)
+router.get("/",obtenerCategorias)
 /*Obtener una categoria por id - publico*/
-router.get("/:id", (req,res)=> {
-    res.json({
-        msg: "get"
-    })
-})
+router.get("/:id", [
+    check("id").custom(existeCategoriaPorId),
+    validarCampos
+],obtenerCategoria)
 /*crear categoria - privado-  cualquier persona con token id valido*/
 router.post("/", [
     validarJwt,

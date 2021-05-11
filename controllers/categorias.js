@@ -1,32 +1,35 @@
 const { response } = require("express");
-const {Categoria}=require("../models")
+const { Categoria } = require("../models")
 //ObtenerCategorias - pagina - imprimir total , populate
-const obtenerCategorias = async(req, res) => {
-     //Devolver los datos de nuestra base de datos, paginacion.
-  const { limite = 5, desde = 0 } = req.query;
+const obtenerCategorias = async (req, res) => {
 
-  const [categorias, total] = await Promise.all([
-    Categoria.find({ estado: true }).skip(Number(desde))
-      .limit(Number(limite)), Categoria.countDocuments({ estado: true })
-  ])
-  res.status(200).json({ total, categorias });
-}
-const usersPatch = (req = request, res = response) => {
-  res.status(200).json({
-    msg: "Patch - controller"
-  })
+    const { limite = 5, desde = 0 } = req.query;
+
+    const [categorias, total] = await Promise.all([
+        Categoria.find({ estado: true }).skip(Number(desde))
+            .limit(Number(limite)), Categoria.countDocuments({ estado: true })
+    ])
+    res.status(200).json({ total, categorias });
 }
 //ObtenerCategoria - regresar el objeto de la categoria, populate
+const obtenerCategoria = async (req, res) => {
+    const { id } = req.params;
+    const categoriaDB = await Categoria.findById(id);
+
+    res.status(201).json(categoriaDB)
+}
+
+
 //actualizarCategoria - recibe nombre
 //borrarCategoria - convertir el estado a false
 //Middleware para ver si el id existe categoria (si no existe mandalo a la verga) guia en helpers
 
-const crearCategoria =async(req,res=response)=> {
-    const nombre  = req.body.nombre.toUpperCase();
+const crearCategoria = async (req, res = response) => {
+    const nombre = req.body.nombre.toUpperCase();
 
-    const categoriaDB = await Categoria.findOne({nombre});
+    const categoriaDB = await Categoria.findOne({ nombre });
 
-    if(categoriaDB) {
+    if (categoriaDB) {
         return res.status(401).json({
             msg: `La categoria ${nombre} ya existe`
         })
@@ -35,7 +38,7 @@ const crearCategoria =async(req,res=response)=> {
     //generar los datos
     const data = {
         nombre,
-        usuario : req.usuario._id
+        usuario: req.usuario._id
     }
     const categoria = new Categoria(data)
 
@@ -47,4 +50,4 @@ const crearCategoria =async(req,res=response)=> {
     })
 }
 
-module.exports={crearCategoria, obtenerCategorias};
+module.exports = { crearCategoria, obtenerCategorias, obtenerCategoria };
