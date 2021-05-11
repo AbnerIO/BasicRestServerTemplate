@@ -41,8 +41,8 @@ const actualizarCategoria = async (req, res) => {
 const borrarCategoria = async (req, res) => {
     const usuario = req.header("x-token")
     const { id } = req.params;
-    categoriaDB = await Categoria.findByIdAndUpdate(id, { estado: false })
-    res.status(201).json({ usuario, id, categoriaDB })
+    categoriaDB = await Categoria.findByIdAndUpdate(id, { estado: false }, {new:true})
+    res.status(201).json( categoriaDB)
 }
 
 const crearCategoria = async (req, res = response) => {
