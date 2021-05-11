@@ -1,12 +1,12 @@
 const { response } = require("express");
 const { Categoria } = require("../models")
-//ObtenerCategorias - pagina - imprimir total , populate
+
 const obtenerCategorias = async (req, res) => {
 
     const { limite = 5, desde = 0 } = req.query;
 
     const [categorias, total] = await Promise.all([
-        Categoria.find({ estado: true }).skip(Number(desde))
+        Categoria.find({ estado: true }).populate("usuario", "nombre").skip(Number(desde))
             .limit(Number(limite)), Categoria.countDocuments({ estado: true })
     ])
     res.status(200).json({ total, categorias });
@@ -25,16 +25,16 @@ const actualizarCategoria = async (req, res) => {
     const nombre = req.body.nombre.toUpperCase();
     const usuario = req.header("x-token")
     const { id } = req.params;
-    categoriaDB = await Categoria.findByIdAndUpdate(id,{nombre} )
-    res.status(201).json({nombre, usuario, id, categoriaDB})
+    categoriaDB = await Categoria.findByIdAndUpdate(id, { nombre })
+    res.status(201).json({ nombre, usuario, id, categoriaDB })
 }
 
 //borrarCategoria - convertir el estado a false
 const borrarCategoria = async (req, res) => {
     const usuario = req.header("x-token")
     const { id } = req.params;
-    categoriaDB = await Categoria.findByIdAndUpdate(id,{estado:false} )
-    res.status(201).json({usuario, id, categoriaDB})
+    categoriaDB = await Categoria.findByIdAndUpdate(id, { estado: false })
+    res.status(201).json({ usuario, id, categoriaDB })
 }
 
 const crearCategoria = async (req, res = response) => {
@@ -63,4 +63,4 @@ const crearCategoria = async (req, res = response) => {
     })
 }
 
-module.exports = { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria , borrarCategoria};
+module.exports = { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria, borrarCategoria };
