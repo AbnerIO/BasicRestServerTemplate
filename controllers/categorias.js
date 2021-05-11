@@ -30,7 +30,12 @@ const actualizarCategoria = async (req, res) => {
 }
 
 //borrarCategoria - convertir el estado a false
-//Middleware para ver si el id existe categoria (si no existe mandalo a la verga) guia en helpers
+const borrarCategoria = async (req, res) => {
+    const usuario = req.header("x-token")
+    const { id } = req.params;
+    categoriaDB = await Categoria.findByIdAndUpdate(id,{estado:false} )
+    res.status(201).json({usuario, id, categoriaDB})
+}
 
 const crearCategoria = async (req, res = response) => {
     const nombre = req.body.nombre.toUpperCase();
@@ -58,4 +63,4 @@ const crearCategoria = async (req, res = response) => {
     })
 }
 
-module.exports = { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria };
+module.exports = { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria , borrarCategoria};

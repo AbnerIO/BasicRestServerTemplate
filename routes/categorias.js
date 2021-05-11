@@ -1,9 +1,9 @@
 const {Router} = require("express");
 const {check} = require("express-validator");
-const { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria } = require("../controllers/categorias");
+const { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria, borrarCategoria } = require("../controllers/categorias");
 const {existeCategoriaPorId}=require("../helpers/categoriavalidator.js");
 
-const {validarJwt, validarCampos} = require("../middlewares");
+const {validarJwt, validarCampos, esAdminRole} = require("../middlewares");
 
 const router = Router();
 
@@ -29,9 +29,10 @@ router.put("/:id",[
     validarCampos
 ] ,actualizarCategoria);
 /*Borrar categoría - Admin*/
-router.delete("/:id", (req,res)=> {
-    res.json({
-        msg: "Borrar"
-    })
-})
+router.delete("/:id",[
+    validarJwt,
+    check("id").custom(existeCategoriaPorId),
+    esAdminRole,
+    validarCampos
+] , borrarCategoria)
 module.exports=router;
