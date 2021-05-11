@@ -12,6 +12,7 @@ const router = Router();
 router.get("/",obtenerCategorias)
 /*Obtener una categoria por id - publico*/
 router.get("/:id", [
+    check("id", "No es un id de mongo").isMongoId(),
     check("id").custom(existeCategoriaPorId),
     validarCampos
 ],obtenerCategoria)
@@ -24,6 +25,7 @@ router.post("/", [
 /*Actualizar categoría - privado-  cualquier persona con token id valido*/
 router.put("/:id",[
     validarJwt,
+    check("id", "No es un id de mongo").isMongoId(),
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("id").custom(existeCategoriaPorId),
     validarCampos
@@ -31,6 +33,7 @@ router.put("/:id",[
 /*Borrar categoría - Admin*/
 router.delete("/:id",[
     validarJwt,
+    check("id", "No es un id de mongo").isMongoId(),
     check("id").custom(existeCategoriaPorId),
     esAdminRole,
     validarCampos

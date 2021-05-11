@@ -14,7 +14,7 @@ const obtenerCategorias = async (req, res) => {
 //ObtenerCategoria - regresar el objeto de la categoria, populate
 const obtenerCategoria = async (req, res) => {
     const { id } = req.params;
-    const categoriaDB = await Categoria.findById(id);
+    const categoriaDB = await Categoria.findById(id).populate("usuario", "nombre");
 
     res.status(201).json(categoriaDB)
 }
