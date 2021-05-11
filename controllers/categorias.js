@@ -1,10 +1,20 @@
 const { response } = require("express");
 const {Categoria}=require("../models")
 //ObtenerCategorias - pagina - imprimir total , populate
-const ObtenerCategorias = async(req, res) => {
-    const {id}= res.params;
+const obtenerCategorias = async(req, res) => {
+     //Devolver los datos de nuestra base de datos, paginacion.
+  const { limite = 5, desde = 0 } = req.query;
 
-    console.log(id)
+  const [categorias, total] = await Promise.all([
+    Categoria.find({ estado: true }).skip(Number(desde))
+      .limit(Number(limite)), Categoria.countDocuments({ estado: true })
+  ])
+  res.status(200).json({ total, categorias });
+}
+const usersPatch = (req = request, res = response) => {
+  res.status(200).json({
+    msg: "Patch - controller"
+  })
 }
 //ObtenerCategoria - regresar el objeto de la categoria, populate
 //actualizarCategoria - recibe nombre
@@ -37,4 +47,4 @@ const crearCategoria =async(req,res=response)=> {
     })
 }
 
-module.exports={crearCategoria};
+module.exports={crearCategoria, obtenerCategorias};
