@@ -6,7 +6,7 @@ const Producto = require("../models/producto.js");
 const actualizarProducto =async(req,res)=>{
     
     const { id } = req.params;
-    const {estado, usuario, ...data} = req.body;//no se si qutar disponible y precioñ
+    const {estado, usuario, ...data} = req.body;
 
     data.nombre = data.nombre.toUpperCase();
     data.usuario = req.usuario._id;
