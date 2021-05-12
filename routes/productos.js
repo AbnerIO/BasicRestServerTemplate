@@ -1,5 +1,5 @@
 const {Router} = require("express");
-const { crearProducto, obtenerProductos, obtenerProducto, actualizarProducto } = require("../controllers/productos.js");
+const { crearProducto, obtenerProductos, obtenerProducto, actualizarProducto, borrarProducto } = require("../controllers/productos.js");
 const {check} = require("express-validator");
 const {validarJwt, validarCampos, esAdminRole} = require("../middlewares");
 const { existeProductoPorId } = require("../helpers/productvalidator.js");
@@ -31,9 +31,11 @@ router.put("/:id",[
     validarCampos
 ],actualizarProducto)
 /*Borrar producto - Admin*/
-router.delete("/:id",(req,res)=>{
-    res.json({
-        msg:"borra"
-    })
-})
+router.delete("/:id",[
+    validarJwt,
+    esAdminRole,
+    check("id", "No es un id de mongo").isMongoId(),
+    check("id").custom(existeProductoPorId),
+    validarCampos
+],borrarProducto)
 module.exports=router;

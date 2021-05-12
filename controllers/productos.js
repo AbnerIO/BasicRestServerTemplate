@@ -6,7 +6,7 @@ const Producto = require("../models/producto.js");
 const actualizarProducto =async(req,res)=>{
     
     const { id } = req.params;
-    const {estado, usuario, ...data} = req.body;//no se si qutar disponible y precio
+    const {estado, usuario, ...data} = req.body;//no se si qutar disponible y precioñ
 
     data.nombre = data.nombre.toUpperCase();
     data.usuario = req.usuario._id;
@@ -16,6 +16,14 @@ const actualizarProducto =async(req,res)=>{
         producto
     })
 }
+
+const borrarProducto = async (req, res) => {
+    const usuario = req.usuario._id;
+    const { id } = req.params;
+    const productoDB = await Producto.findByIdAndUpdate(id, { estado: false, usuario }, {new:true})
+    res.status(201).json(productoDB)
+}
+
 const obtenerProductos = async(req, res=response)=> {
     
     const { limite = 5, desde = 0 } = req.query;
@@ -69,5 +77,6 @@ module.exports={
     actualizarProducto,
     crearProducto,
     obtenerProductos,
-    obtenerProducto
+    obtenerProducto,
+    borrarProducto
 }
