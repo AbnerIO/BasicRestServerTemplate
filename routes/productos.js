@@ -1,5 +1,5 @@
 const {Router} = require("express");
-const { crearProducto, obtenerProductos, obtenerProducto } = require("../controllers/productos.js");
+const { crearProducto, obtenerProductos, obtenerProducto, actualizarProducto } = require("../controllers/productos.js");
 const {check} = require("express-validator");
 const {validarJwt, validarCampos, esAdminRole} = require("../middlewares");
 const { existeProductoPorId } = require("../helpers/productvalidator.js");
@@ -23,11 +23,13 @@ router.post("/",[
     validarCampos
 ],crearProducto)
 /*Actualizar producto - privado-  cualquier persona con token id valido*/
-router.put("/:id",(req,res)=>{
-    res.json({
-        msg:"update"
-    })
-})
+router.put("/:id",[
+    validarJwt,
+    check("id", "No es un id de mongo").isMongoId(),
+    check("nombre", "El nombre es obligatorio").not().isEmpty(),
+    check("id").custom(existeProductoPorId),
+    validarCampos
+],actualizarProducto)
 /*Borrar producto - Admin*/
 router.delete("/:id",(req,res)=>{
     res.json({

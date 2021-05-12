@@ -3,6 +3,19 @@ const { Categoria } = require("../models/index.js");
 const producto = require("../models/producto.js");
 const Producto = require("../models/producto.js");
 
+const actualizarProducto =async(req,res)=>{
+    
+    const { id } = req.params;
+    const {estado, usuario, ...data} = req.body;//no se si qutar disponible y precio
+
+    data.nombre = data.nombre.toUpperCase();
+    data.usuario = req.usuario._id;
+
+    const producto = await Producto.findOneAndUpdate(id, data, {new:true});
+    res.status(201).json({
+        producto
+    })
+}
 const obtenerProductos = async(req, res=response)=> {
     
     const { limite = 5, desde = 0 } = req.query;
@@ -53,6 +66,7 @@ const crearProducto = async (req, res = response) => {
     })
 }
 module.exports={
+    actualizarProducto,
     crearProducto,
     obtenerProductos,
     obtenerProducto
