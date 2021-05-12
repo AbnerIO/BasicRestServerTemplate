@@ -1,7 +1,7 @@
 const {Router} = require("express");
 const {check} = require("express-validator");
 const { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria, borrarCategoria } = require("../controllers/categorias");
-const {existeCategoriaPorId}=require("../helpers/categoriavalidator.js");
+const {existeCategoriaPorId}=require("../helpers/dbvalidators.js");
 
 const {validarJwt, validarCampos, esAdminRole} = require("../middlewares");
 
