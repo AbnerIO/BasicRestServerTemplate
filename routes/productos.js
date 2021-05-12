@@ -1,17 +1,13 @@
 const {Router} = require("express");
-const { crearProducto } = require("../controllers/productos.js");
+const { crearProducto, obtenerProductos } = require("../controllers/productos.js");
 const {check} = require("express-validator");
 const {validarJwt, validarCampos, esAdminRole} = require("../middlewares");
 
 const router = Router();
 
 
-/*Obtener todos los prodcutos - publico */
-router.get("/",(req,res)=>{
-    res.json({
-        msg:"get todas"
-    })
-})
+/*Obtener todos los productos - publico */
+router.get("/",obtenerProductos)
 /*Obtener un producto por id - publico*/
 router.get("/:id",(req,res)=>{
     res.json({

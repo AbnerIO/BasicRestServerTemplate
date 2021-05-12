@@ -2,7 +2,16 @@ const {response} = require("express");
 const { Categoria } = require("../models/index.js");
 const Producto = require("../models/producto.js");
 
+const obtenerProductos = async(req, res=response)=> {
+    
+    const { limite = 5, desde = 0 } = req.query;
 
+    const [productos, total] = await Promise.all([
+        Producto.find({ estado: true }).populate("usuario", "nombre").skip(Number(desde))
+            .limit(Number(limite)), Producto.countDocuments({ estado: true })
+    ])
+    res.status(200).json({ total, productos });
+}
 const crearProducto = async (req, res = response) => {
     const nombre = req.body.nombre.toUpperCase();
     const category = req.body.categoria.toUpperCase();
@@ -35,5 +44,6 @@ const crearProducto = async (req, res = response) => {
     })
 }
 module.exports={
-    crearProducto
+    crearProducto,
+    obtenerProductos
 }
