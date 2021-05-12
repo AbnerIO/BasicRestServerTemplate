@@ -1,7 +1,8 @@
 const {Router} = require("express");
-const { crearProducto, obtenerProductos } = require("../controllers/productos.js");
+const { crearProducto, obtenerProductos, obtenerProducto } = require("../controllers/productos.js");
 const {check} = require("express-validator");
 const {validarJwt, validarCampos, esAdminRole} = require("../middlewares");
+const { existeProductoPorId } = require("../helpers/productvalidator.js");
 
 const router = Router();
 
@@ -9,11 +10,11 @@ const router = Router();
 /*Obtener todos los productos - publico */
 router.get("/",obtenerProductos)
 /*Obtener un producto por id - publico*/
-router.get("/:id",(req,res)=>{
-    res.json({
-        msg:"get una"
-    })
-})
+router.get("/:id",[
+    check("id", "No es un id de mongo").isMongoId(),
+    check("id").custom(existeProductoPorId),
+    validarCampos
+],obtenerProducto)
 /*crear producto - privado-  cualquier persona con token id valido*/
 router.post("/",[
     validarJwt,

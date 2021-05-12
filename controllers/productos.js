@@ -1,5 +1,6 @@
 const {response} = require("express");
 const { Categoria } = require("../models/index.js");
+const producto = require("../models/producto.js");
 const Producto = require("../models/producto.js");
 
 const obtenerProductos = async(req, res=response)=> {
@@ -11,6 +12,14 @@ const obtenerProductos = async(req, res=response)=> {
             .limit(Number(limite)), Producto.countDocuments({ estado: true })
     ])
     res.status(200).json({ total, productos });
+}
+
+const obtenerProducto= async(req, res)=>{
+    const {id} = req.params;
+    const productoDB = await Producto.findById(id).populate("usuario", "nombre");
+    res.status(200).json({
+        productoDB
+    })
 }
 const crearProducto = async (req, res = response) => {
     const nombre = req.body.nombre.toUpperCase();
@@ -45,5 +54,6 @@ const crearProducto = async (req, res = response) => {
 }
 module.exports={
     crearProducto,
-    obtenerProductos
+    obtenerProductos,
+    obtenerProducto
 }
