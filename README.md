@@ -47,4 +47,4 @@ Check the ".envexample" and put your own credentials.
 
 ## HTTP-Routes documentation 
 
-https://documenter.getpostman.com/view/15724018/TzRUCSzY
+Examples : https://documenter.getpostman.com/view/15724018/TzRUCSzY
