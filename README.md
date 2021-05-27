@@ -44,3 +44,7 @@ Check the ".envexample" and put your own credentials.
 ## Running the project
 
     $ npm start
+
+## HTTP-Routes documentation 
+
+https://documenter.getpostman.com/view/15724018/TzRUCSzY
